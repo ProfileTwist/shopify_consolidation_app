@@ -1,0 +1,67 @@
+# === Secrets / environment (NEVER commit real credentials) ===
+# `.env` (no slash) matches .env at any depth: root, api/, web/, inbound-webhook-api/
+.env
+.env.local
+.env.*.local
+.env.backup
+*.pem
+auth.json
+# NOTE: .env.docker / .env.example are templates (placeholders only) and ARE committed.
+
+# === OS ===
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+
+# === Editors / IDEs ===
+.idea/
+.vscode/
+.fleet/
+*.swp
+*.swo
+*~
+
+# === PHP / Laravel (api + inbound-webhook-api) ===
+vendor/
+composer.phar
+.phpunit.result.cache
+.phpunit.cache/
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+# Laravel runtime state
+api/storage/*.key
+api/storage/framework/cache/*
+api/storage/framework/sessions/*
+api/storage/framework/views/*
+api/storage/framework/testing/*
+api/storage/logs/*
+api/bootstrap/cache/*.php
+inbound-webhook-api/storage/*.key
+inbound-webhook-api/storage/framework/cache/*
+inbound-webhook-api/storage/framework/sessions/*
+inbound-webhook-api/storage/framework/views/*
+inbound-webhook-api/storage/logs/*
+inbound-webhook-api/bootstrap/cache/*.php
+
+# Local SQLite databases
+*.sqlite
+*.sqlite-journal
+
+# === Node / Vite (web) ===
+node_modules/
+web/dist/
+web/.vite/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Laravel-built front-end assets
+api/public/build/
+api/public/hot
+
+# === Logs / misc ===
+*.log
