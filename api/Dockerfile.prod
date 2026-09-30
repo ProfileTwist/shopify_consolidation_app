@@ -1,0 +1,30 @@
+# Production image: FrankenPHP serves the Laravel API over HTTP on :80.
+# The same image is reused (with a command override) for the queue worker,
+# scheduler, and one-off migrations — `php` CLI is available.
+FROM dunglas/frankenphp:1-php8.4
+
+# PHP extensions Laravel + MySQL + queue workers need.
+RUN install-php-extensions pdo_mysql bcmath intl zip opcache pcntl
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+
+# Install PHP deps first for layer caching.
+COPY composer.json composer.lock ./
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader --no-scripts || true
+
+# App code.
+COPY . .
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader \
+    && chown -R www-data:www-data storage bootstrap/cache
+
+# HTTP only (no auto-HTTPS) — the ALB terminates TLS in front of this.
+ENV SERVER_NAME=:80
+
+EXPOSE 80
+
+# Default: serve the Laravel public/ dir on :80.
+# Overridden in ECS for the worker (`php artisan queue:work`) and
+# scheduler (`php artisan schedule:work`).
+CMD ["frankenphp", "php-server", "--root", "public/", "--listen", ":80"]

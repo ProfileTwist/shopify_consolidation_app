@@ -1,0 +1,22 @@
+# Production image: FrankenPHP serves the inbound webhook API over HTTP on :80.
+FROM dunglas/frankenphp:1-php8.4
+
+RUN install-php-extensions bcmath intl zip opcache
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader --no-scripts || true
+
+COPY . .
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader \
+    && chown -R www-data:www-data storage bootstrap/cache
+
+# HTTP only — ALB terminates TLS.
+ENV SERVER_NAME=:80
+
+EXPOSE 80
+
+CMD ["frankenphp", "php-server", "--root", "public/", "--listen", ":80"]
