@@ -7,6 +7,7 @@ import OrdersPage from "@/pages/OrdersPage"
 import PayoutsPage from "@/pages/PayoutsPage"
 import ProductsPage from "@/pages/ProductsPage"
 import ConnectionsPage from "@/pages/ConnectionsPage"
+import UsersPage from "@/pages/UsersPage"
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/payouts" element={<PayoutsPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/connections" element={<ConnectionsPage />} />
+            <Route path="/users" element={<UsersPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

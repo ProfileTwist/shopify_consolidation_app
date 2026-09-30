@@ -8,6 +8,7 @@ const titles: Record<string, string> = {
   "/payouts": "Payouts",
   "/products": "Products",
   "/connections": "Connections",
+  "/users": "Users",
 }
 
 export default function Layout() {

@@ -4,6 +4,7 @@ export interface User {
   email: string
   roles: string[]
   permissions: string[]
+  created_at?: string
 }
 
 export interface SalesOrder {

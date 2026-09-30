@@ -7,6 +7,7 @@ use App\Http\Controllers\ShopifyConnectController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Public
@@ -39,5 +40,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/connections/{connection}', [StoreController::class, 'update']);
         Route::delete('/connections/{connection}', [StoreController::class, 'destroy']);
         Route::post('/connections/{connection}/sync', [StoreController::class, 'sync']);
+    });
+
+    // User management — admin only.
+    Route::middleware('permission:manage users')->group(function () {
+        Route::get('/users', [UserController::class, 'index']);
+        Route::get('/roles', [UserController::class, 'roles']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::put('/users/{user}', [UserController::class, 'update']);
+        Route::delete('/users/{user}', [UserController::class, 'destroy']);
     });
 });

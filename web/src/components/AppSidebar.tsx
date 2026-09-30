@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom"
-import { ShoppingCart, Wallet, Package, Plug, Store, ChevronsUpDown, LogOut } from "lucide-react"
+import { ShoppingCart, Wallet, Package, Plug, Users, Store, ChevronsUpDown, LogOut } from "lucide-react"
 import { useAuth } from "@/lib/auth"
 import {
   Sidebar,
@@ -27,11 +27,13 @@ const nav = [
   { to: "/payouts", label: "Payouts", icon: Wallet },
   { to: "/products", label: "Products", icon: Package },
   { to: "/connections", label: "Connections", icon: Plug },
+  { to: "/users", label: "Users", icon: Users, perm: "manage users" },
 ]
 
 export function AppSidebar() {
-  const { user, logout } = useAuth()
+  const { user, logout, can } = useAuth()
   const location = useLocation()
+  const items = nav.filter((i) => !i.perm || can(i.perm))
 
   const initials = (user?.name ?? "?")
     .split(" ")
@@ -64,7 +66,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Platform</SidebarGroupLabel>
           <SidebarMenu>
-            {nav.map((item) => (
+            {items.map((item) => (
               <SidebarMenuItem key={item.to}>
                 <SidebarMenuButton
                   asChild
